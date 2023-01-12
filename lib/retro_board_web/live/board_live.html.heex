@@ -1,41 +1,47 @@
-<div class="my-4">
-  <h2 class="text-xl font-semibold">Active Boards</h2>
-  <ul>
-    <.link :for={board <- @boards} navigate={~p"/myboards/#{board.id}"}>
-      <li class="py-2 hover:bg-gray-300 rounded-md">
-        <%= board.title %>
-      </li>
-    </.link>
-  </ul>
-</div>
-<.form
-  for={@changeset}
-  id="board-form"
-  phx-change="validate"
-  phx-submit="save"
-  class="mt-5 sm:flex sm:items-center"
->
-  <div class="w-full sm:max-w-xs">
-    <label for="title" class="sr-only">Add Board</label>
-    <input
-      type="text"
-      name="board[title]"
-      id="board-form_title"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-      placeholder="Board Name"
-    />
+<div class="mx-auto max-w-3xl">
+  <div class="my-4">
+    <h2 class="text-xl font-semibold ">Active Boards</h2>
+    <div class="mt-4 border-y border-gray-300">
+      <ul class="my-2">
+        <.link :for={board <- @boards} navigate={~p"/myboards/#{board.id}"}>
+          <li class="py-2 hover:bg-gray-300 rounded-md">
+            <%= board.title %>
+          </li>
+        </.link>
+      </ul>
+    </div>
   </div>
-  <button
-    type="submit"
-    phx-disable-with="Saving..."
-    class={[
-      button_valid(@valid),
-      "mt-3 inline-flex w-full items-center justify-center rounded-md border border-transparent",
-      "px-4 py-2 font-medium text-white shadow-sm",
-      "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-    ]}
-    disabled={@valid != true}
-  >
-    Add Board
-  </button>
-</.form>
+  <div class="mt-8">
+    <.form
+      for={@changeset}
+      id="board-form"
+      phx-change="validate"
+      phx-submit="save"
+      class="mt-5 sm:flex sm:items-center"
+    >
+      <div class="w-full sm:max-w-xs">
+        <label for="title" class="sr-only">Add Board</label>
+        <input
+          type="text"
+          name="board[title]"
+          id="board-form_title"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Board Name"
+        />
+      </div>
+      <button
+        type="submit"
+        phx-disable-with="Saving..."
+        class={[
+          button_valid(@valid),
+          "mt-3 inline-flex w-full items-center justify-center rounded-md border border-transparent",
+          "px-4 py-2 font-medium text-white shadow-sm",
+          "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+        ]}
+        disabled={@valid != true}
+      >
+        Add Board
+      </button>
+    </.form>
+  </div>
+</div>

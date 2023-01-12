@@ -1,0 +1,59 @@
+<div class="mx-2 bg-gray-200 flex flex-col rounded-md w-1/3">
+  <div class="flex items-center justify-between px-3 py-2">
+    <h3 class="text-sm font-semibold uppercase text-gray-700"><%= @type %></h3>
+  </div>
+  <div class="px-3 pb-3">
+    <ul :for={card <- @cards} class="space-y-3 mt-1">
+      <li class="bg-white p-3 shadow rounded-md border-b border-gray-300 hover:bg-gray-50">
+        <div class="flex justify-between space-x-3">
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-gray-900"><%= card.user %></p>
+          </div>
+        </div>
+        <div class="mt-1">
+          <p class="text-sm text-gray-600 line-clamp-2">
+            <%= card.body %>
+          </p>
+        </div>
+      </li>
+    </ul>
+    <!-- Card Entry Component -->
+    <div class="mt-4">
+      <.form
+        for={@changeset}
+        phx-target={@myself}
+        id={"card-form-#{@type}"}
+        phx-change="validate"
+        phx-submit="save"
+        class="mt-5 sm:flex sm:items-center"
+      >
+        <div class="w-full">
+          <div class="flex items-center" aria-orientation="horizontal" role="tablist">
+            <textarea
+              rows="5"
+              name="new_card[body]"
+              class="block w-full rounded-md border-gray-300 shadow-sm 
+              focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            >
+</textarea>
+          </div>
+          <div class="mt-2 flex justify-end">
+            <button
+              type="submit"
+              phx-disable-with="Saving..."
+              class={[
+                button_valid(@valid),
+                "mt-3 inline-flex w-full items-center justify-center rounded-md border border-transparent",
+                "px-4 py-2 font-medium text-white shadow-sm",
+                "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              ]}
+              disabled={@valid != true}
+            >
+              Add Card
+            </button>
+          </div>
+        </div>
+      </.form>
+    </div>
+  </div>
+</div>
