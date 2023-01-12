@@ -2,22 +2,28 @@ defmodule RetroBoardWeb.Router do
   use RetroBoardWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, {RetroBoardWeb.Layouts, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, {RetroBoardWeb.Layouts, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", RetroBoardWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :home
+    get("/", PageController, :home)
+    live("/boards", BoardLive.Index, :index)
+    live("/boards/new", BoardLive.Index, :new)
+    live("/boards/:id/edit", BoardLive.Index, :edit)
+
+    live("/boards/:id", BoardLive.Show, :show)
+    live("/boards/:id/show/edit", BoardLive.Show, :edit)
   end
 
   # Other scopes may use custom stacks.
@@ -35,10 +41,10 @@ defmodule RetroBoardWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: RetroBoardWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: RetroBoardWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end

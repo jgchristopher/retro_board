@@ -1,0 +1,26 @@
+<.header>
+  Board <%= @board.id %>
+  <:subtitle>This is a board record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/boards/#{@board}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit board</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title"><%= @board.title %></:item>
+</.list>
+
+<.back navigate={~p"/boards"}>Back to boards</.back>
+
+<.modal :if={@live_action == :edit} id="board-modal" show on_cancel={JS.patch(~p"/boards/#{@board}")}>
+  <.live_component
+    module={RetroBoardWeb.BoardLive.FormComponent}
+    id={@board.id}
+    title={@page_title}
+    action={@live_action}
+    board={@board}
+    navigate={~p"/boards/#{@board}"}
+  />
+</.modal>

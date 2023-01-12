@@ -1,0 +1,39 @@
+<.header>
+  Listing Boards
+  <:actions>
+    <.link patch={~p"/boards/new"}>
+      <.button>New Board</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="boards" rows={@boards} row_click={&JS.navigate(~p"/boards/#{&1}")}>
+  <:col :let={board} label="Title"><%= board.title %></:col>
+  <:action :let={board}>
+    <div class="sr-only">
+      <.link navigate={~p"/boards/#{board}"}>Show</.link>
+    </div>
+    <.link patch={~p"/boards/#{board}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={board}>
+    <.link phx-click={JS.push("delete", value: %{id: board.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="board-modal"
+  show
+  on_cancel={JS.navigate(~p"/boards")}
+>
+  <.live_component
+    module={RetroBoardWeb.BoardLive.FormComponent}
+    id={@board.id || :new}
+    title={@page_title}
+    action={@live_action}
+    board={@board}
+    navigate={~p"/boards"}
+  />
+</.modal>
