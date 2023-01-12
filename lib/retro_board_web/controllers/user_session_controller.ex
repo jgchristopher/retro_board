@@ -34,6 +34,13 @@ defmodule RetroBoardWeb.UserSessionController do
     end
   end
 
+  defp create(conn, %{"guest" => guest_params}, _info) do
+    %{"user_name" => user_name} = guest_params
+
+    conn
+    |> UserAuth.log_in_guest(user_name)
+  end
+
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "Logged out successfully.")

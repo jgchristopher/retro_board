@@ -3,35 +3,50 @@
     <h1 class="text-2xl font-black tracking-tight"><%= @board.title %> - Retro</h1>
     <.link navigate={~p"/myboards"} class="underline">Back to Boards</.link>
   </header>
-  <section class="flex-1">
-    <div class="inline-flex h-full w-full items-start px-4 pb-4 mt-4">
-      <!-- Card Column -->
-      <.live_component
-        module={RetroBoardWeb.BoardColumnComponent}
-        id={"#{@board.id}_start_column"}
-        cards={@board.start_cards}
-        type="start"
-        board_id={@board.id}
-        new_card={%Card{}}
-      />
-      <!-- Card Column -->
-      <.live_component
-        module={RetroBoardWeb.BoardColumnComponent}
-        id={"#{@board.id}_stop_column"}
-        cards={@board.stop_cards}
-        type="stop"
-        board_id={@board.id}
-        new_card={%Card{}}
-      />
-      <!-- Card Column -->
-      <.live_component
-        module={RetroBoardWeb.BoardColumnComponent}
-        id={"#{@board.id}_continue_column"}
-        cards={@board.continue_cards}
-        type="continue"
-        board_id={@board.id}
-        new_card={%Card{}}
-      />
+  <div class="inline-flex h-full w-full items-start px-4 pb-4 mt-4">
+    <section class="flex-1">
+      <div class="inline-flex h-full w-full items-start px-4 pb-4 mt-4">
+        <!-- Card Column -->
+        <.live_component
+          module={RetroBoardWeb.BoardColumnComponent}
+          id={"#{@board.id}_start_column"}
+          cards={@board.start_cards}
+          type="start"
+          board_id={@board.id}
+          new_card={%Card{}}
+          user_name={@user_name}
+        />
+        <!-- Card Column -->
+        <.live_component
+          module={RetroBoardWeb.BoardColumnComponent}
+          id={"#{@board.id}_stop_column"}
+          cards={@board.stop_cards}
+          type="stop"
+          board_id={@board.id}
+          new_card={%Card{}}
+          user_name={@user_name}
+        />
+        <!-- Card Column -->
+        <.live_component
+          module={RetroBoardWeb.BoardColumnComponent}
+          id={"#{@board.id}_continue_column"}
+          cards={@board.continue_cards}
+          type="continue"
+          board_id={@board.id}
+          new_card={%Card{}}
+          user_name={@user_name}
+        />
+      </div>
+    </section>
+    <div class="items-start px-4 pb-4 mt-4 w-1/4 bg-gray-200 h-full rounded-md ">
+      <div class="mt-2 border-b border-solid border-black">
+        <h3 class="text-sm font-semibold uppercase text-gray-700">Active Users & Guests</h3>
+      </div>
+      <ul>
+        <li :for={user <- @users} class="m-1">
+          <%= user.user_name %>
+        </li>
+      </ul>
     </div>
-  </section>
+  </div>
 </div>

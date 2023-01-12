@@ -4,32 +4,30 @@ defmodule RetroBoardWeb.Router do
   import RetroBoardWeb.UserAuth
 
   pipeline :browser do
-    plug(:accepts, ["html"])
-    plug(:fetch_session)
-    plug(:fetch_live_flash)
-    plug(:put_root_layout, {RetroBoardWeb.Layouts, :root})
-    plug(:protect_from_forgery)
-    plug(:put_secure_browser_headers)
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, {RetroBoardWeb.Layouts, :root}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
     plug :fetch_current_user
   end
 
   pipeline :api do
-    plug(:accepts, ["json"])
+    plug :accepts, ["json"]
   end
 
   scope "/", RetroBoardWeb do
-    pipe_through(:browser)
+    pipe_through :browser
 
-    get("/", PageController, :home)
-    # live("/boards", BoardLive.Index, :index)
-    # live("/boards/new", BoardLive.Index, :new)
-    # live("/boards/:id/edit", BoardLive.Index, :edit)
+    get "/", PageController, :home
+
+    # live "/boards", BoardLive.Index, :index
+    # live "/boards/new", BoardLive.Index, :new
+    # live "/boards/:id/edit", BoardLive.Index, :edit
     #
-    # live("/boards/:id", BoardLive.Show, :show)
-    # live("/boards/:id/show/edit", BoardLive.Show, :edit)
-
-    live "/myboards", BoardLive
-    live "/myboards/:id", BoardShowLive
+    # live "/boards/:id", BoardLive.Show, :show
+    # live "/boards/:id/show/edit", BoardLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
@@ -47,10 +45,10 @@ defmodule RetroBoardWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through(:browser)
+      pipe_through :browser
 
-      live_dashboard("/dashboard", metrics: RetroBoardWeb.Telemetry)
-      forward("/mailbox", Plug.Swoosh.MailboxPreview)
+      live_dashboard "/dashboard", metrics: RetroBoardWeb.Telemetry
+      forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
 
@@ -63,11 +61,23 @@ defmodule RetroBoardWeb.Router do
       on_mount: [{RetroBoardWeb.UserAuth, :redirect_if_user_is_authenticated}] do
       live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
+      live "/guests/log_in", GuestLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
       live "/users/reset_password/:token", UserResetPasswordLive, :edit
     end
 
     post "/users/log_in", UserSessionController, :create
+    post "/guests/log_in", UserSessionController, :create
+  end
+
+  # require_guest_or_authenticated_user
+  scope "/", RetroBoardWeb do
+    pipe_through [:browser, :require_guest_or_authenticated_user]
+
+    live_session :require_guest_or_authenticated_user,
+      on_mount: [{RetroBoardWeb.UserAuth, :ensure_user_or_guest}] do
+      live "/myboards/:id", BoardShowLive
+    end
   end
 
   scope "/", RetroBoardWeb do
@@ -75,6 +85,7 @@ defmodule RetroBoardWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{RetroBoardWeb.UserAuth, :ensure_authenticated}] do
+      live "/myboards", BoardLive
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

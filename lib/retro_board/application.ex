@@ -17,9 +17,10 @@ defmodule RetroBoard.Application do
       # Start Finch
       {Finch, name: RetroBoard.Finch},
       # Start the Endpoint (http/https)
-      RetroBoardWeb.Endpoint
+      RetroBoardWeb.Endpoint,
       # Start a worker by calling: RetroBoard.Worker.start_link(arg)
       # {RetroBoard.Worker, arg}
+      RetroBoardWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

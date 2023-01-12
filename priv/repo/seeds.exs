@@ -12,10 +12,19 @@
 alias RetroBoard.Repo
 alias RetroBoard.Boards.Board
 alias RetroBoard.Cards.Card
+alias RetroBoard.Accounts
+
+{:ok, user} =
+  Accounts.register_user(%{
+    "display_name" => "jgchristopher",
+    "email" => "john@jdotc.xyz",
+    "password" => "123456123456"
+  })
 
 board =
   Repo.insert!(%Board{
-    title: "Board 1"
+    title: "Board 1",
+    user_id: user.id
   })
 
 cards = [

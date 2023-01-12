@@ -33,6 +33,7 @@ defmodule RetroBoardWeb.UserRegistrationLive do
           Oops, something went wrong! Please check the errors below.
         </.error>
 
+        <.input field={{f, :display_name}} type="text" label="Display Name" required />
         <.input field={{f, :email}} type="email" label="Email" required />
         <.input field={{f, :password}} type="password" label="Password" required />
 

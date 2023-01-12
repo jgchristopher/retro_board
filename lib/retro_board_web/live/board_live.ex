@@ -3,11 +3,13 @@ defmodule RetroBoardWeb.BoardLive do
 
   alias RetroBoard.Boards
   alias RetroBoard.Boards.Board
+  alias RetroBoard.Accounts
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     new_board = %Board{}
     changeset = Boards.change_board(new_board)
+    user = Accounts.get_user_by_session_token(Map.get(session, "user_token"))
 
     {:ok,
      socket
@@ -15,11 +17,14 @@ defmodule RetroBoardWeb.BoardLive do
      |> assign(:page_title, "Our Boards")
      |> assign(:board, new_board)
      |> assign(:changeset, changeset)
+     |> assign(:user, user)
      |> assign(:valid, false)}
   end
 
   @impl true
   def handle_event("validate", %{"board" => board_params}, socket) do
+    board_params = board_params |> Map.put("user_id", socket.assigns.user.id)
+
     changeset =
       socket.assigns.board
       |> Boards.change_board(board_params)
@@ -33,6 +38,8 @@ defmodule RetroBoardWeb.BoardLive do
 
   def handle_event("save", %{"board" => board_params}, socket) do
     if socket.assigns.valid do
+      board_params = board_params |> Map.put("user_id", socket.assigns.user.id)
+
       case Boards.create_board(board_params) do
         {:ok, board} ->
           list_of_boards = [board | socket.assigns.boards]
