@@ -26,6 +26,7 @@ defmodule RetroBoardWeb.Router do
     # live("/boards/:id/show/edit", BoardLive.Show, :edit)
 
     live "/myboards", BoardLive
+    live "/myboards/:id", BoardShowLive
   end
 
   # Other scopes may use custom stacks.
