@@ -3,8 +3,11 @@
     <h3 class="text-sm font-semibold uppercase text-gray-700"><%= @type %></h3>
   </div>
   <div class="px-3 pb-3">
-    <ul :for={card <- @cards} class="space-y-3 mt-1">
-      <li class="bg-white p-3 shadow rounded-md border-b border-gray-300 hover:bg-gray-50">
+    <ul class="space-y-3 mt-1">
+      <li
+        :for={card <- @cards}
+        class="bg-white p-3 shadow rounded-md border-b border-gray-300 hover:bg-gray-50"
+      >
         <div class="flex justify-between space-x-3">
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-medium text-gray-900"><%= card.user %></p>

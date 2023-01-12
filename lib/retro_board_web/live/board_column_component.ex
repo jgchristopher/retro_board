@@ -42,12 +42,14 @@ defmodule RetroBoardWeb.BoardColumnComponent do
 
     case Cards.create_card(card_params) do
       {:ok, card} ->
-        # This is not efficient but the desired UX
-        cards = socket.assigns.cards ++ [card]
+        Phoenix.PubSub.broadcast(
+          RetroBoard.PubSub,
+          "board:#{socket.assigns.board_id}:new_card",
+          {:new_card, card, :type, socket.assigns.type}
+        )
 
         {:noreply,
          socket
-         |> assign(:cards, cards)
          |> assign(:valid, false)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
