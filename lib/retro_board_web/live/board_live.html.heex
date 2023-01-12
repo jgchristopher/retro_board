@@ -4,3 +4,34 @@
     <li><%= board.title %></li>
   </ul>
 </div>
+<.form
+  for={@changeset}
+  id="board-form"
+  phx-change="validate"
+  phx-submit="save"
+  class="mt-5 sm:flex sm:items-center"
+>
+  <div class="w-full sm:max-w-xs">
+    <label for="title" class="sr-only">Add Board</label>
+    <input
+      type="text"
+      name="board[title]"
+      id="board-form_title"
+      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      placeholder="Board Name"
+    />
+  </div>
+  <button
+    type="submit"
+    phx-disable-with="Saving..."
+    class={[
+      button_valid(@valid),
+      "mt-3 inline-flex w-full items-center justify-center rounded-md border border-transparent",
+      "px-4 py-2 font-medium text-white shadow-sm",
+      "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+    ]}
+    disabled={@valid != true}
+  >
+    Add Board
+  </button>
+</.form>

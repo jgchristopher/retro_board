@@ -9,7 +9,7 @@ defmodule RetroBoard.Boards do
   alias RetroBoard.Boards.Board
 
   @doc """
-  Returns the list of boards.
+  Returns the list of boards order_by id descending.
 
   ## Examples
 
@@ -18,7 +18,7 @@ defmodule RetroBoard.Boards do
 
   """
   def list_boards do
-    Repo.all(Board)
+    Board |> order_by(desc: :id) |> Repo.all()
   end
 
   @doc """
