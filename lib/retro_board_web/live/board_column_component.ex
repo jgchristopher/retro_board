@@ -21,9 +21,13 @@ defmodule RetroBoardWeb.BoardColumnComponent do
 
   @impl true
   def handle_event("validate", %{"new_card" => new_card_params}, socket) do
-    # For now just assign these here
     new_card_params =
-      add_missing_params(new_card_params, socket.assigns.type, socket.assigns.board_id)
+      add_missing_params(
+        new_card_params,
+        socket.assigns.user_name,
+        socket.assigns.type,
+        socket.assigns.board_id
+      )
 
     changeset =
       socket.assigns.new_card
@@ -37,8 +41,13 @@ defmodule RetroBoardWeb.BoardColumnComponent do
   end
 
   def handle_event("save", %{"new_card" => card_params}, socket) do
-    # For now just assign these here
-    card_params = add_missing_params(card_params, socket.assigns.type, socket.assigns.board_id)
+    card_params =
+      add_missing_params(
+        card_params,
+        socket.assigns.user_name,
+        socket.assigns.type,
+        socket.assigns.board_id
+      )
 
     case Cards.create_card(card_params) do
       {:ok, card} ->
@@ -61,9 +70,9 @@ defmodule RetroBoardWeb.BoardColumnComponent do
   defp button_valid(true), do: "bg-indigo-600 hover:bg-indigo-700"
   defp button_valid(false), do: "bg-zinc-600"
 
-  defp add_missing_params(params, type, board_id) do
+  defp add_missing_params(params, user, type, board_id) do
     params
-    |> Map.put("user", "Anonymous")
+    |> Map.put("user", user)
     |> Map.put("type", type)
     |> Map.put("board_id", board_id)
   end

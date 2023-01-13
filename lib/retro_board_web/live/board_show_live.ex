@@ -10,10 +10,6 @@ defmodule RetroBoardWeb.BoardShowLive do
   @impl true
   def mount(_params, session, socket) do
     user_name = Map.get(session, "user_name")
-    Logger.info(user_name: user_name)
-
-    if connected?(socket) do
-    end
 
     {:ok,
      socket
